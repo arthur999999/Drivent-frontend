@@ -9,9 +9,12 @@ export default function Payment() {
 
   if (!enrollment)
     return (
-      <NoEnrollment>
-        <p>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</p>
-      </NoEnrollment>
+      <ContainerWithoutEnrollment>
+        <MainDescription>Ingresso e pagamento</MainDescription>
+        <NoEnrollment>
+          <p>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</p>
+        </NoEnrollment>
+      </ContainerWithoutEnrollment>
     );
 
   return (
@@ -39,6 +42,9 @@ export default function Payment() {
     </Container>
   );
 }
+const ContainerWithoutEnrollment = styled.div`
+  height: 100%;
+`;
 const TypeOfTicket = styled.div`
   display: flex;
   height: 90%;
@@ -68,6 +74,7 @@ const NoEnrollment = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 90%;
   p {
     width: 388px;
     height: 46px;
