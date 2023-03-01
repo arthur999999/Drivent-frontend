@@ -1,3 +1,5 @@
+import SelectWithHotel from '../../../components/Dashboard/SelectWithHotel';
+
 export default function Payment() {
-  return 'Pagamento: Em breve!';
+  return (<SelectWithHotel/>);
 }
