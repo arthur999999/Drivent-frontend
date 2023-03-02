@@ -60,7 +60,7 @@ export default function NavigationBar() {
 }
 
 const Container = styled.div`
-  display: flex;
+  display: flex; 
   flex-direction: column;
   background-color: #ddd;
   box-shadow: 2px 0 10px 0 rgba(0,0,0,0.1);
