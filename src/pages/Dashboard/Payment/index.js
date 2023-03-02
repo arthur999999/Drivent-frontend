@@ -2,10 +2,25 @@ import styled from 'styled-components';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import Check from './checkBox';
 import { useState } from 'react';
+import { getTicket } from '../../../services/ticketApi';
+import { useContext } from 'react';
+import UserContext from '../../../contexts/UserContext';
+import { useEffect } from 'react';
+import PaymentConfirm from './paymentConfirm';
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
   const [ticketType, setTicketType] = useState({ price: undefined, isRemote: undefined });
+  const [isPaid, setIsPaid] = useState(false);
+  const [ticketData, setTicketData] = useState();
+  const { userData } = useContext(UserContext);
+
+  useEffect(() => {
+    getTicket(userData.token).then((data) => {
+      data.status === 'PAID' && setIsPaid(true);
+      setTicketData(data);
+    });
+  }, []);
 
   if (!enrollment)
     return (
@@ -19,26 +34,30 @@ export default function Payment() {
 
   return (
     <Container>
-      <TypeOfTicket>
-        <MainDescription>Ingresso e pagamento</MainDescription>
-        <MainTitle>Primeiro, escolha sua modalidade de ingresso</MainTitle>
-        <Boxes>
-          <Check
-            setTicketType={setTicketType}
-            title={'Presencial'}
-            price={250}
-            plus={false}
-            color={ticketType.isRemote === true ? '#FFEED2' : 'white'}
-          ></Check>
-          <Check
-            setTicketType={setTicketType}
-            title={'Online'}
-            price={100}
-            plus={false}
-            color={ticketType.isRemote === false ? '#FFEED2' : 'white'}
-          ></Check>
-        </Boxes>
-      </TypeOfTicket>
+      {ticketData && isPaid ? (
+        <PaymentConfirm ticketData={ticketData} />
+      ) : (
+        <TypeOfTicket>
+          <MainDescription>Ingresso e pagamento</MainDescription>
+          <MainTitle>Primeiro, escolha sua modalidade de ingresso</MainTitle>
+          <Boxes>
+            <Check
+              setTicketType={setTicketType}
+              title={'Presencial'}
+              price={250}
+              plus={false}
+              color={ticketType.isRemote === true ? '#FFEED2' : 'white'}
+            ></Check>
+            <Check
+              setTicketType={setTicketType}
+              title={'Online'}
+              price={100}
+              plus={false}
+              color={ticketType.isRemote === false ? '#FFEED2' : 'white'}
+            ></Check>
+          </Boxes>
+        </TypeOfTicket>
+      )}
     </Container>
   );
 }
@@ -105,4 +124,39 @@ const MainTitle = styled.h1`
 `;
 const Boxes = styled.div`
   display: flex;
+`;
+
+const PaymentBox = styled.div`
+  width: 290px;
+  height: 108px;
+  background: #ffeed2;
+  border-radius: 20px;
+  margin-top: 2%;
+  margin-bottom: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  p {
+    color: #454545;
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 16px;
+  }
+  h1 {
+    color: #898989;
+    font-size: 14px;
+    font-weight: 400;
+  }
+`;
+
+const PaymentText = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 14px;
+  font-size: 15px;
+  h1 {
+    font-weight: 700;
+  }
 `;
