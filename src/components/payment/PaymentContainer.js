@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import TicketCard from './TicketCard';
+import TicketCard from './ticketCard.js';
 
 export default function PaymentContainer() {
   return (
