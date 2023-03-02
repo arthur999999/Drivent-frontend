@@ -4,7 +4,7 @@ import api from '../../services/api.js';
 import useToken from '../../hooks/useToken.js';
 import { useEffect, useState } from 'react';
 
-export default function TicketCard() {
+export default function TicketCard({ setTicketId }) {
   const token = useToken();
   const [ticket, setTicket] = useState(null);
 
@@ -15,7 +15,10 @@ export default function TicketCard() {
       },
     });
 
-    response.then(res => {setTicket(res.data.TicketType);});
+    response.then(res => {
+      setTicket(res.data.TicketType);
+      setTicketId(res.data.id);
+    });
   }, [token]);
 
   return (
@@ -41,6 +44,8 @@ const Div = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    margin-bottom: 30px;
 `;
 const StyledText = styled(Typography)`
   color: #454545;
