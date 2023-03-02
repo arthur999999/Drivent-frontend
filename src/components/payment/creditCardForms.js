@@ -1,23 +1,117 @@
-import creditCard from '../../assets/images/creditCard.png';
 import styled from 'styled-components';
+import { useState } from 'react';
+import Cards from 'react-credit-cards-2';
+import 'react-credit-cards-2/es/styles-compiled.css';
+
+import {
+  formatCreditCardNumber,
+  formatCVC,
+  formatExpirationDate
+} from './validateCardForms';
 
 export default function CreditCardForms() {
+  const [data, setData] = useState({
+    number: '',
+    name: '',
+    expiry: '',
+    cvc: '',
+    issuer: '',
+    focused: '',
+    formData: null
+  });
+
+  const handleCallback = ({ issuer }, isValid) => {
+    if (isValid) {
+      setData({ ...data, issuer });
+    }
+  };
+  
+  const handleInputFocus = ({ target }) => {
+    setData({
+      ...data,
+      focused: target.name
+    });
+  };
+  
+  const handleInputChange = ({ target }) => {
+    if (target.name === 'number') {
+      target.value = formatCreditCardNumber(target.value);
+    } else if (target.name === 'expiry') {
+      target.value = formatExpirationDate(target.value);
+    } else if (target.name === 'cvc') {
+      target.value = formatCVC(target.value);
+    }
+  
+    setData({ ...data, [target.name]: target.value });
+  };
+  
+  const handleSubmit = e => {
+    e.preventDefault();
+    alert('You have finished payment!');
+    this.form.reset();
+  };
+
   return (
     <form>
       <Container>
-        <img src={creditCard} alt='credit card eg'/>
+        <Cards
+          number={data.number}
+          name={data.name}
+          expiry={data.expiry}
+          cvc={data.cvc}
+          focused={data.focused}
+          callback={(e) => handleCallback(e)}
+        />
         <Div>
           <aside>
-            <Input placeholder='Card Number'/>
+            <Input 
+              type='tel'
+              name='number'
+              className='form-control'
+              placeholder='Card Number'
+              pattern='[\d| ]{16,22}'
+              maxLength='19'
+              required
+              onChange={e => handleInputChange(e)}
+              onFocus={e => handleInputFocus(e)}
+            />
             <Eg>Eg.: 49..., 50..., 51..., 52...</Eg>
           </aside>
-          <Input placeholder='Name'/>
+          <Input 
+            type='text'
+            name='name'
+            className='form-control'
+            placeholder='Name'
+            pattern='[a-z A-Z-]+'
+            required
+            onChange={(e) => handleInputChange(e)}
+            onFocus={(e) => handleInputFocus(e)}
+          />
           <div>
-            <MediumInput placeholder='Valid Thru'/>
-            <SmallInput placeholder='CVC'/>
+            <MediumInput
+              type='tel'
+              name='expiry'
+              className='form-control'
+              placeholder='Valid Thru'
+              pattern='\d\d/\d\d'
+              required
+              onChange={e => handleInputChange(e)}
+              onFocus={e => handleInputFocus(e)}
+            />
+            <SmallInput               
+              type='tel'
+              name='cvc'
+              className='form-control'
+              placeholder='CVC'
+              pattern='\d{3}'
+              required
+              onChange={e => handleInputChange(e)}
+              onFocus={e => handleInputFocus(e)}
+            />
           </div>
         </Div>
       </Container>
+      <input type='hidden' name='issuer' value={data.issuer} />
       <Button>FINALIZAR PAGAMENTO</Button>
     </form>
   );
@@ -28,7 +122,7 @@ const Container = styled.div`
 `;
 
 const Div = styled.div`
-  margin-top: 15px;
+  /* margin-top: 15px; */
   margin-left: 35px;
 
   display: flex;
