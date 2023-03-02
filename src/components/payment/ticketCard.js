@@ -20,8 +20,13 @@ export default function TicketCard() {
 
   return (
     <Div>
-      <StyledText variant="subtitle1">{ticket.name}</StyledText>
-      <StyledPrice variant="subtitle1">R$ {ticket.price},00</StyledPrice>
+      {ticket ?       
+        <>
+          <StyledText variant="subtitle1">{ticket.name}</StyledText>
+          <StyledPrice variant="subtitle1">R$ {ticket.price},00</StyledPrice>
+        </>
+        : <></>}
+
     </Div>
   );
 }
