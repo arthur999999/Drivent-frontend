@@ -13,7 +13,7 @@ export default function PaymentContainer() {
       <StyledSubtitle variant="subtitle1">Ingresso escolhido</StyledSubtitle>
       <TicketCard setTicketId = { setTicketId }/>
       <StyledSubtitlePayment variant="subtitle1">Pagamento</StyledSubtitlePayment>
-      <CreditCardForms/>
+      <CreditCardForms ticketId = { ticketId }/>
     </>
   );
 }

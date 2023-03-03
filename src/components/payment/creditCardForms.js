@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import Cards from 'react-credit-cards-2';
 import 'react-credit-cards-2/es/styles-compiled.css';
+import Payment from 'payment';
+import api from '../../services/api.js';
+import useToken from '../../hooks/useToken.js';
+import { toast } from 'react-toastify';
 
 import {
   formatCreditCardNumber,
@@ -9,7 +13,7 @@ import {
   formatExpirationDate
 } from './validateCardForms';
 
-export default function CreditCardForms() {
+export default function CreditCardForms({ ticketId }) {
   const [data, setData] = useState({
     number: '',
     name: '',
@@ -19,6 +23,7 @@ export default function CreditCardForms() {
     focused: '',
     formData: null
   });
+  const token = useToken();
 
   const handleCallback = ({ issuer }, isValid) => {
     if (isValid) {
@@ -47,12 +52,35 @@ export default function CreditCardForms() {
   
   const handleSubmit = e => {
     e.preventDefault();
-    alert('You have finished payment!');
-    this.form.reset();
+
+    const issuer =  Payment.fns.cardType(data.number);
+
+    const body = {
+      ticketId,
+      cardData: {
+        issuer,
+        number: data.number,
+        name: data.name,
+        expirationDate: data.expiry,
+        cvv: data.cvc
+      }
+    };
+
+    const response = api.get('/tickets', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }, body
+    });
+
+    response.then(() => toast('Pagamento realizado com sucesso'));
+    response.catch((err) => {
+      toast('Houve um erro no processamento do pagamento!');
+      console.log(err.response.data);
+    });
   };
 
   return (
-    <form>
+    <form onSubmit={ handleSubmit }>
       <Container>
         <Cards
           number={data.number}
