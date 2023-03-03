@@ -2,10 +2,24 @@ import styled from 'styled-components';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import Check from './checkBox';
 import { useState } from 'react';
+import SelectWithHotel from '../../../components/Dashboard/SelectWithHotel';
+import ReserveConfirm from '../../../components/Dashboard/SelectWithHotel/ReservButton';
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
-  const [ticketType, setTicketType] = useState({ price: undefined, isRemote: undefined });
+  const [ticketType, setTicketType] = useState({ price: undefined, isRemote: undefined, includesHotel: undefined });
+
+  function hiddenReservedButton() {
+    if(ticketType.isRemote === false) {
+      return 'show';
+    }
+
+    if(ticketType.includesHotel !== undefined) {
+      return 'show';
+    }
+
+    return 'hidden';
+  }
 
   if (!enrollment)
     return (
@@ -38,7 +52,14 @@ export default function Payment() {
             color={ticketType.isRemote === false ? '#FFEED2' : 'white'}
           ></Check>
         </Boxes>
+        <OtherOptions className={ticketType.isRemote ? 'show' : 'hidden'}>
+          <SelectWithHotel setTicketType={setTicketType} ticketType={ticketType}/>
+        </OtherOptions>
+        <ReservButton className={hiddenReservedButton()}>
+          <ReserveConfirm ticketType={ticketType}/>
+        </ReservButton>
       </TypeOfTicket>
+      
     </Container>
   );
 }
@@ -49,6 +70,10 @@ const TypeOfTicket = styled.div`
   display: flex;
   height: 90%;
   flex-direction: column;
+
+  .hidden {
+    display: none;
+  }
 `;
 const Container = styled.div`
   width: 100%;
@@ -99,4 +124,14 @@ const MainTitle = styled.h1`
 `;
 const Boxes = styled.div`
   display: flex;
+`;
+
+const OtherOptions= styled.div`
+  box-sizing: border-box;
+`;
+
+const ReservButton= styled.div`
+  box-sizing: border-box;
+  margin-top: 20px;
+  padding-bottom: 20px;
 `;
