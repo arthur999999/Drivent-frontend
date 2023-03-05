@@ -66,10 +66,10 @@ export default function CreditCardForms({ ticketId, setIsPaid }) {
       }
     };
 
-    const response = api.get('/tickets', {
+    const response = api.post('/payments/process', body, {
       headers: {
         Authorization: `Bearer ${token}`,
-      }, body
+      }
     });
 
     response.then(() => {

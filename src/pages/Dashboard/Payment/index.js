@@ -17,13 +17,14 @@ export default function Payment() {
   const [isPaid, setIsPaid] = useState(false);
   const [ticketData, setTicketData] = useState();
   const { userData } = useContext(UserContext);
+  const [reloadPage, setReloadPage] = useState([]);
 
   useEffect(() => {
     getTicket(userData.token).then((data) => {
       data.status === 'PAID' && setIsPaid(true);
       setTicketData(data);
     });
-  }, []);
+  }, [reloadPage]);
 
   function hiddenReservedButton() {
     if (ticketType.isRemote === false) {
@@ -49,7 +50,7 @@ export default function Payment() {
 
   return (
     <Container>
-      {ticketData ? (
+      { ticketData  ? (
         isPaid ? <PaymentConfirm ticketData={ticketData} />
           : <PaymentContainer setIsPaid = {setIsPaid}/>
       ) : (
@@ -76,7 +77,7 @@ export default function Payment() {
             <SelectWithHotel setTicketType={setTicketType} ticketType={ticketType} />
           </OtherOptions>
           <ReservButton className={hiddenReservedButton()}>
-            <ReserveConfirm ticketType={ticketType} />
+            <ReserveConfirm ticketType={ticketType} setReloadPage={setReloadPage} reloadPage={reloadPage} />
           </ReservButton>
         </TypeOfTicket>
       )}

@@ -5,7 +5,7 @@ import useTicktTypes from '../../../hooks/api/useTicket';
 import useToken from '../../../hooks/useToken';
 import { postTicket } from '../../../services/ticketApi';
 
-export default function ReserveConfirm({ ticketType }) {
+export default function ReserveConfirm({ ticketType, setReloadPage, reloadPage }) {
   const token = useToken();
   const { enrollment } = useEnrollment();
   const types = useTicktTypes();
@@ -43,7 +43,9 @@ export default function ReserveConfirm({ ticketType }) {
       status: 'RESERVED',       
       updatedAt: dayjs()   
     };
-    postTicket(token, ticket);
+    postTicket(token, ticket).then( () => {
+      setReloadPage([...reloadPage, 1]);
+    });
   }
   return(
     <Global>
