@@ -13,7 +13,7 @@ import {
   formatExpirationDate
 } from './validateCardForms';
 
-export default function CreditCardForms({ ticketId }) {
+export default function CreditCardForms({ ticketId, setIsPaid }) {
   const [data, setData] = useState({
     number: '',
     name: '',
@@ -72,7 +72,10 @@ export default function CreditCardForms({ ticketId }) {
       }, body
     });
 
-    response.then(() => toast('Pagamento realizado com sucesso'));
+    response.then(() => {
+      toast('Pagamento realizado com sucesso');
+      setIsPaid(true);
+    });
     response.catch((err) => {
       toast('Houve um erro no processamento do pagamento!');
       console.log(err.response.data);
