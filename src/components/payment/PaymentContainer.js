@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import TicketCard from './ticketCard.js';
 import CreditCardForms from './creditCardForms.js';
 
-export default function PaymentContainer() {
+export default function PaymentContainer({ setIsPaid }) {
   const [ticketId, setTicketId] = useState(null);
 
   return (
@@ -13,7 +13,7 @@ export default function PaymentContainer() {
       <StyledSubtitle variant="subtitle1">Ingresso escolhido</StyledSubtitle>
       <TicketCard setTicketId = { setTicketId }/>
       <StyledSubtitlePayment variant="subtitle1">Pagamento</StyledSubtitlePayment>
-      <CreditCardForms ticketId = { ticketId }/>
+      <CreditCardForms ticketId = { ticketId } setIsPaid = {setIsPaid}/>
     </>
   );
 }

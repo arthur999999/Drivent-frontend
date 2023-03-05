@@ -51,7 +51,7 @@ export default function Payment() {
     <Container>
       {ticketData ? (
         isPaid ? <PaymentConfirm ticketData={ticketData} />
-          : <PaymentContainer/>
+          : <PaymentContainer setIsPaid = {setIsPaid}/>
       ) : (
         <TypeOfTicket>
           <MainDescription>Ingresso e pagamento</MainDescription>
