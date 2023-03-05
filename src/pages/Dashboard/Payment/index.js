@@ -1,8 +1,3 @@
-// import PaymentContainer from '../../../components/payment/PaymentContainer';
-
-// export default function Payment() {
-//   // return (
-//   //   <PaymentContainer/>
 import styled from 'styled-components';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import Check from './checkBox';
@@ -14,6 +9,7 @@ import { useEffect } from 'react';
 import PaymentConfirm from './paymentConfirm';
 import SelectWithHotel from '../../../components/Dashboard/SelectWithHotel';
 import ReserveConfirm from '../../../components/Dashboard/SelectWithHotel/ReservButton';
+import PaymentContainer from '../../../components/payment/PaymentContainer';
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
@@ -53,8 +49,9 @@ export default function Payment() {
 
   return (
     <Container>
-      {ticketData && isPaid ? (
-        <PaymentConfirm ticketData={ticketData} />
+      {ticketData ? (
+        isPaid ? <PaymentConfirm ticketData={ticketData} />
+          : <PaymentContainer/>
       ) : (
         <TypeOfTicket>
           <MainDescription>Ingresso e pagamento</MainDescription>
