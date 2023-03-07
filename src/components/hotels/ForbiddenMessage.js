@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 export default function ForbiddenMessage({ message }) {
   return (
     <>
-      <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
+      <StyledTypography variant="h4">Escolha hotel e quarto</StyledTypography>
       <Div>
         <Text>{ message }</Text>
       </Div>
