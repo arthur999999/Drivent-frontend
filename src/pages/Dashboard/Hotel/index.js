@@ -3,6 +3,7 @@ import ChooseHotel from '../../../components/hotels/ChooseHotel';
 import ForbiddenMessage from '../../../components/hotels/ForbiddenMessage';
 import useToken from '../../../hooks/useToken';
 import { getTicket } from '../../../services/ticketApi';
+
 export default function Hotel() {
   const token = useToken();
   const [ticket, setTicket] = useState({ status: 'RESERVED' });
@@ -11,7 +12,6 @@ export default function Hotel() {
   useEffect(() => {
     getTicket(token).then((data) => {
       setTicket(data);
-      console.log(data);
     });
   }, []);
 
@@ -20,9 +20,7 @@ export default function Hotel() {
       {
         ticket.status === 'PAID' 
           ? ticket.TicketType.includesHotel 
-            ? hotelId 
-              ? <></> 
-              : <ChooseHotel setHotelId={ setHotelId }/>
+            ? <ChooseHotel hotelId= { hotelId } setHotelId={ setHotelId }/>
             : <ForbiddenMessage message="Sua modalidade de ingresso não inclui hospedagem. Prossiga para a escolha de atividades"/> 
           : <ForbiddenMessage message="Você precisa confirmar o pagamento antes de fazer a escolha de hospedagem"/>
       }

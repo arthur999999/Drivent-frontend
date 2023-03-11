@@ -5,7 +5,7 @@ import api from '../../services/api.js';
 import useToken from '../../hooks/useToken.js';
 import { useEffect, useState } from 'react';
 
-export default function ChooseHotel({ setHotelId }) {
+export default function ChooseHotel({ hotelId, setHotelId }) {
   const token = useToken();
   const [hotels, setHotel] = useState(null);
 
@@ -18,7 +18,6 @@ export default function ChooseHotel({ setHotelId }) {
 
     response.then(res => {
       setHotel(res.data);
-      console.log(hotels);
     });
   }, [token]);
 
@@ -27,7 +26,8 @@ export default function ChooseHotel({ setHotelId }) {
       <StyledTypography variant="h4">Escolha hotel e quarto</StyledTypography>
       <StyledSubtitle variant="subtitle1">Primeiro, escolha o seu hotel:</StyledSubtitle>
 
-      {hotels ? hotels.map(data => <HotelCard data={ data } key={ data.id }/> )
+      {hotels 
+        ? hotels.map(data => <HotelCard data={ data } key={ data.id } hotelId= { hotelId } setHotelId={ setHotelId }/> )
         : <></>}
     </>
   );

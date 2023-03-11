@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export default function HotelCard({ data }) {
+export default function HotelCard({ data, hotelId, setHotelId }) {
   return (
-    <Card>
+    <Card onClick={() => setHotelId(data.id)} choose={ hotelId } id={ data.id }>
 
       <Img src={ data.image }/>
       <Name>{ data.name }</Name>
@@ -23,7 +23,7 @@ const Card = styled.div`
 height: 264px;
 width: 196px;
 border-radius: 10px;
-background-color: #EBEBEB;
+background-color: ${props => props.choose === props.id ? '#FFEED2' : '#EBEBEB'};
 
 padding: 14px;
 
