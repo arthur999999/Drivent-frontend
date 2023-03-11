@@ -1,19 +1,19 @@
 import styled from 'styled-components';
 
-export default function HotelCard() {
+export default function HotelCard({ data }) {
   return (
     <Card>
 
-      <Img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB1xGP480mlqyRYDY-BquOmh8pSJaY_xkCwHgu5oQj&s'/>
-      <Name>Driven Resorts</Name>
+      <Img src={ data.image }/>
+      <Name>{ data.name }</Name>
 
       <Title>Tipos de acomodação:</Title>
-      <Infos>Single e Double</Infos>
+      <Infos>{ data.roomTypes }</Infos>
 
       <div></div>
 
       <Title>Vagas disponíveis:</Title>
-      <Infos>103</Infos>
+      <Infos>{ data.vacancies }</Infos>
       
     </Card>
   );
