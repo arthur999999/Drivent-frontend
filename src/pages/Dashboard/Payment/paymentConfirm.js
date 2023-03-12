@@ -54,6 +54,9 @@ const MainTitle = styled.h1`
 
 const PaymentBox = styled.div`
   width: 290px;
+  box-sizing: border-box;
+  padding: 20px;
+  text-align: center; 
   height: 108px;
   background: #ffeed2;
   border-radius: 20px;

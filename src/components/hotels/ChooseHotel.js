@@ -1,43 +1,72 @@
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import HotelCard from './HotelCard';
-import api from '../../services/api.js';
 import useToken from '../../hooks/useToken.js';
 import { useEffect, useState } from 'react';
+import { getHotels, getRoomWithHotelId } from '../../services/hotelApi';
+import ChooseRoom from '../rooms/ChooseRoom';
 
-export default function ChooseHotel({ hotelId, setHotelId }) {
+export default function ChooseHotel({ hotelId, setHotelId, roomChoosed, setRoomChoosed, reservarQuarto }) {
   const token = useToken();
   const [hotels, setHotel] = useState(null);
+  const [hotelRooms, setHotelRooms] = useState(null);
 
   useEffect(() => {
-    const response = api.get('/hotels', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    response.then(res => {
-      setHotel(res.data);
+    const res = getHotels(token);
+    res.then((res) => {
+      setHotel(res);
     });
   }, [token]);
+
+  useEffect(() => {
+    if (hotelId !== null) {
+      getRoomWithHotelId(token, hotelId).then((res) => {
+        setHotelRooms(res.Rooms);
+      });
+    }
+  }, [hotelId]);
 
   return (
     <>
       <StyledTypography variant="h4">Escolha hotel e quarto</StyledTypography>
       <StyledSubtitle variant="subtitle1">Primeiro, escolha o seu hotel:</StyledSubtitle>
-
-      {hotels 
-        ? hotels.map(data => <HotelCard data={ data } key={ data.id } hotelId= { hotelId } setHotelId={ setHotelId }/> )
-        : <></>}
+      <Container>
+        {hotels ? (
+          hotels.map((data) => <HotelCard data={data} key={data.id} hotelId={hotelId} setHotelId={setHotelId} />)
+        ) : (
+          <></>
+        )}
+      </Container>
+      {hotelRooms ? <ChooseRoom hotelRooms={hotelRooms} roomChoosed={roomChoosed} setRoomChoosed={setRoomChoosed} ></ChooseRoom> : <></>}
+      {roomChoosed ? <ReserveRoom onClick={() => reservarQuarto()}>RESERVAR QUARTO</ReserveRoom> : ''}
     </>
   );
 }
 
 const StyledTypography = styled(Typography)`
-  margin-bottom: 37px!important;
+  margin-bottom: 37px !important;
 `;
 
 const StyledSubtitle = styled(Typography)`
-  margin-bottom: 17px!important;
-  color: #8E8E8E;
+  margin-bottom: 17px !important;
+  color: #8e8e8e;
 `;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  cursor: pointer;
+`;
+
+const ReserveRoom = styled.button`
+  width: 182px;
+  height: 37px;
+  background: #E0E0E0;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  margin: 30px 0;
+  border: 0px; 
+  cursor: pointer;
+`;
+
