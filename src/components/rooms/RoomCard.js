@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { AiOutlineUser } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function RoomCard({ room, roomChoosed, setRoomChoosed }) {
-  let [users, setUsers] = useState(Array(room.capacity).fill(<AiOutlineUser></AiOutlineUser>));
+  const [users, setUsers] = useState(Array(room.capacity).fill(<AiOutlineUser></AiOutlineUser>));
 
   if (room.Booking.length === room.capacity) {
     return (
@@ -15,15 +15,21 @@ export default function RoomCard({ room, roomChoosed, setRoomChoosed }) {
     );
   }
 
-  if (room.Booking.length !== 0 && room.Booking.roomId === room.id) {
-    const indiceOcupado = users.indexOf(<AiOutlineUser></AiOutlineUser>);
-    users = users.splice(indiceOcupado === -1 ? users.length - 1 : indiceOcupado, 1, <FaUser></FaUser>);
+  if (room.Booking.length !== 0) {
+    const newArr = Array(room.capacity).fill(<AiOutlineUser></AiOutlineUser>);
+    newArr.splice(newArr.indexOf(<AiOutlineUser></AiOutlineUser>), 1, <FaUser></FaUser>);
+    return (
+      <Card onClick={() => setRoomChoosed(room.id)} bgColor={roomChoosed === room.id ? '#FFEED2' : 'white'}>
+        <Name>{room.name}</Name>
+        <Users>{newArr.map((user) => user)}</Users>
+      </Card>
+    );
   }
 
   if (roomChoosed === room.id) {
     users.splice(users.indexOf(<AiOutlineUser></AiOutlineUser>), 1, <FaUser style={{ color: 'red' }}></FaUser>);
   } else {
-    users.splice(users.indexOf(<FaUser style={{ color: 'pink' }}></FaUser>), 1, <AiOutlineUser></AiOutlineUser>);
+    users.splice(users.indexOf(<FaUser style={{ color: 'red' }}></FaUser>), 1, <AiOutlineUser></AiOutlineUser>);
   }
 
   return (
