@@ -20,7 +20,7 @@ export default function Hotel() {
   const booking = getBooking();
   console.log(booking);
 
-  if(!booking) {
+  if(0) {
     return (
       <>
         {
