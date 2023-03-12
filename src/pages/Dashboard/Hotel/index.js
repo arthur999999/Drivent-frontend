@@ -20,6 +20,30 @@ export default function Hotel() {
     });
   }, []);
 
+  const booking = getBooking();
+  console.log(booking);
+
+  if(booking) {
+    return (
+      <Global>
+        <h2>Escolha de hotel e quarto</h2>
+        <p>Você já escolheu seu quarto:</p>
+        <Card>
+          <img src='https://i.pinimg.com/564x/78/f9/56/78f95637635a6f5b6950b1e0bd2efdc0.jpg' alt='foto do hotel' />
+          <h2>Hotel Driven</h2>
+          <div className='desc'>
+            <p>Quarto Reservado</p>
+            <span>101 (Double)</span>
+          </div>
+          <div className='desc'>
+            <p>Quarto Reservado</p>
+            <span>101 (Double)</span>
+          </div>
+        </Card>
+      </Global>
+    );
+  }
+
   function reservarQuarto() {
     postBooking(token, roomChoosed).then((res) => {
       console.log(res);
