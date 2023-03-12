@@ -5,11 +5,14 @@ import ForbiddenMessage from '../../../components/hotels/ForbiddenMessage';
 import { getBooking } from '../../../hooks/api/useBooking';
 import useToken from '../../../hooks/useToken';
 import { getTicket } from '../../../services/ticketApi';
+import { postBooking } from '../../../services/hotelApi';
+import { toast } from 'react-toastify';
 
 export default function Hotel() {
   const token = useToken();
   const [ticket, setTicket] = useState({ status: 'RESERVED' });
   const [hotelId, setHotelId] = useState(null);
+  const [roomChoosed, setRoomChoosed] = useState(null);
 
   useEffect(() => {
     getTicket(token).then((data) => {
@@ -17,40 +20,29 @@ export default function Hotel() {
     });
   }, []);
 
-  const booking = getBooking();
-  console.log(booking);
+  function reservarQuarto() {
+    postBooking(token, roomChoosed).then((res) => {
+      console.log(res);
+      toast('Ticket reservado com sucesso!!!');
+    }).catch((e) => {
+      toast(e.message);
+      console.log(e);
+    });
+  }
 
-  if(0) {
+  if (ticket.status !== 'PAID') {
+    return <ForbiddenMessage message="Você precisa confirmar o pagamento antes de fazer a escolha de hospedagem" />;
+  } 
+  if (!ticket.TicketType.includesHotel) {
     return (
-      <>
-        {
-          ticket.status === 'PAID' 
-            ? ticket.TicketType.includesHotel 
-              ? <ChooseHotel hotelId= { hotelId } setHotelId={ setHotelId }/>
-              : <ForbiddenMessage message="Sua modalidade de ingresso não inclui hospedagem. Prossiga para a escolha de atividades"/> 
-            : <ForbiddenMessage message="Você precisa confirmar o pagamento antes de fazer a escolha de hospedagem"/>
-        }
-      </>
+      <ForbiddenMessage message="Sua modalidade de ingresso não inclui hospedagem. Prossiga para a escolha de atividades" />
     );
   }
-  
+
   return (
-    <Global>
-      <h2>Escolha de hotel e quarto</h2>
-      <p>Você já escolheu seu quarto:</p>
-      <Card>
-        <img src='https://i.pinimg.com/564x/78/f9/56/78f95637635a6f5b6950b1e0bd2efdc0.jpg' alt='foto do hotel' />
-        <h2>Hotel Driven</h2>
-        <div className='desc'>
-          <p>Quarto Reservado</p>
-          <span>101 (Double)</span>
-        </div>
-        <div className='desc'>
-          <p>Quarto Reservado</p>
-          <span>101 (Double)</span>
-        </div>
-      </Card>
-    </Global>
+    <>
+      <ChooseHotel hotelId={hotelId} setHotelId={setHotelId} roomChoosed={roomChoosed} setRoomChoosed={setRoomChoosed} reservarQuarto={reservarQuarto} />
+    </>
   );
 }
 
