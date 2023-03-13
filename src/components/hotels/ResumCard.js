@@ -3,18 +3,18 @@ import styled from 'styled-components';
 import useToken from '../../hooks/useToken';
 import { getRoomWithHotelId } from '../../services/hotelApi';
 
-export default function ResumeCard({ booking }) {
+export default function ResumeCard({ booking, setChangeRoom }) {
   const token = useToken();
   const [hotelWithRooms, setHotelWirhRooms] = useState({});
 
-  let nameType; 
-  if(booking.Room.capacity === 1) {
+  let nameType;
+  if (booking.Room.capacity === 1) {
     nameType = 'Single';
   }
-  if(booking.Room.capacity === 2) {
+  if (booking.Room.capacity === 2) {
     nameType = 'Double';
   }
-  if(booking.Room.capacity === 3) {
+  if (booking.Room.capacity === 3) {
     nameType = 'Triple';
   }
   useEffect(() => {
@@ -26,41 +26,44 @@ export default function ResumeCard({ booking }) {
   }, []);
 
   function noQuarto() {
-    if( hotelWithRooms.name) {
-      const quarto = hotelWithRooms.Rooms.find((m) => m.id === booking.Room.id );
-      if(quarto.Booking.length === 1) {
+    if (hotelWithRooms.name) {
+      const quarto = hotelWithRooms.Rooms.find((m) => m.id === booking.Room.id);
+      if (quarto.Booking.length === 1) {
         return 'Apenas você';
       }
-      if(quarto.Booking.length === 2) {
+      if (quarto.Booking.length === 2) {
         return 'Você e mais 1';
       }
-      if(quarto.Booking.length === 3) {
+      if (quarto.Booking.length === 3) {
         return 'Você e mais 2';
       }
     }
     return 'null';
-  }  
-  return(
+  }
+  return (
     <Global>
       <h2>Escolha de hotel e quarto</h2>
       <p>Você já escolheu seu quarto:</p>
       <Card>
-        <img src={hotelWithRooms.image} alt='foto do hotel' />
+        <img src={hotelWithRooms.image} alt="foto do hotel" />
         <h2>{hotelWithRooms.name}</h2>
-        <div className='desc'>
+        <div className="desc">
           <p>Quarto Reservado</p>
-          <span>{booking.Room.name} ({nameType})</span>
+          <span>
+            {booking.Room.name} ({nameType})
+          </span>
         </div>
-        <div className='desc'>
+        <div className="desc">
           <p>Pessoas no seu quarto</p>
           <span>{noQuarto()} </span>
         </div>
       </Card>
-    </Global>);
-};
+      <ReserveButton onClick={() => setChangeRoom(true)}>TROCAR DE QUARTO</ReserveButton>
+    </Global>
+  );
+}
 
 const Global = styled.div`
-
   box-sizing: border-box;
 
   h2 {
@@ -78,7 +81,7 @@ const Global = styled.div`
     font-weight: 400;
     font-size: 20px;
     line-height: 23px;
-    color: #8E8E8E;
+    color: #8e8e8e;
     margin-top: 36px;
   }
 `;
@@ -87,11 +90,11 @@ const Card = styled.div`
   margin-top: 14px;
   width: 196px;
   height: 264px;
-  background: #FFEED2;
+  background: #ffeed2;
   border-radius: 10px;
   padding-left: 14px;
 
-  img{
+  img {
     object-fit: cover;
     width: 168px;
     height: 109px;
@@ -113,13 +116,13 @@ const Card = styled.div`
     margin-bottom: 14px;
   }
 
-  .desc p{
+  .desc p {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 12px;
     line-height: 14px;
-    color: #3C3C3C;
+    color: #3c3c3c;
     margin-top: 0px;
   }
 
@@ -129,6 +132,17 @@ const Card = styled.div`
     font-weight: 400;
     font-size: 12px;
     line-height: 14px;
-    color: #3C3C3C;
+    color: #3c3c3c;
   }
+`;
+
+const ReserveButton = styled.button`
+  width: 182px;
+  height: 37px;
+  background: #e0e0e0;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  margin: 38px 0;
+  border: 0px;
+  cursor: pointer;
 `;

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { getHotels, getRoomWithHotelId } from '../../services/hotelApi';
 import ChooseRoom from '../rooms/ChooseRoom';
 
-export default function ChooseHotel({ hotelId, setHotelId, roomChoosed, setRoomChoosed, reservarQuarto }) {
+export default function ChooseHotel({ hotelId, setHotelId, roomChoosed, setRoomChoosed, reservarQuarto, booking }) {
   const token = useToken();
   const [hotels, setHotel] = useState(null);
   const [hotelRooms, setHotelRooms] = useState(null);
@@ -16,15 +16,13 @@ export default function ChooseHotel({ hotelId, setHotelId, roomChoosed, setRoomC
     res.then((res) => {
       setHotel(res);
     });
-  }, [token]);
 
-  useEffect(() => {
     if (hotelId !== null) {
       getRoomWithHotelId(token, hotelId).then((res) => {
         setHotelRooms(res.Rooms);
       });
     }
-  }, [hotelId]);
+  }, [token, hotelId]);
 
   return (
     <>
@@ -37,8 +35,12 @@ export default function ChooseHotel({ hotelId, setHotelId, roomChoosed, setRoomC
           <></>
         )}
       </Container>
-      {hotelRooms ? <ChooseRoom hotelRooms={hotelRooms} roomChoosed={roomChoosed} setRoomChoosed={setRoomChoosed} ></ChooseRoom> : <></>}
-      {roomChoosed ? <ReserveRoom onClick={() => reservarQuarto()}>RESERVAR QUARTO</ReserveRoom> : ''}
+      {hotelRooms ? (
+        <ChooseRoom hotelRooms={hotelRooms} roomChoosed={roomChoosed} setRoomChoosed={setRoomChoosed}></ChooseRoom>
+      ) : (
+        <></>
+      )}
+      {roomChoosed ? <ReserveRoom onClick={() => reservarQuarto(booking)}>RESERVAR QUARTO</ReserveRoom> : ''}
     </>
   );
 }
@@ -62,11 +64,10 @@ const Container = styled.div`
 const ReserveRoom = styled.button`
   width: 182px;
   height: 37px;
-  background: #E0E0E0;
+  background: #e0e0e0;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   margin: 30px 0;
-  border: 0px; 
+  border: 0px;
   cursor: pointer;
 `;
-
