@@ -7,8 +7,8 @@ export default function ChooseRoom({ hotelRooms, roomChoosed, setRoomChoosed }) 
     <>
       <StyledSubtitle variant="subtitle1">Ótima pedida! Agora escolha seu quarto:</StyledSubtitle>
       <Container>
-        {hotelRooms.map((room) => (
-          <RoomCard room={room} roomChoosed={roomChoosed} setRoomChoosed={setRoomChoosed} ></RoomCard>
+        {hotelRooms.map((room, idx) => (
+          <RoomCard key={idx} room={room} roomChoosed={roomChoosed} setRoomChoosed={setRoomChoosed}></RoomCard>
         ))}
       </Container>
     </>
