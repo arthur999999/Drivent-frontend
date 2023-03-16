@@ -10,6 +10,7 @@ import PaymentConfirm from './paymentConfirm';
 import SelectWithHotel from '../../../components/Dashboard/SelectWithHotel';
 import ReserveConfirm from '../../../components/Dashboard/SelectWithHotel/ReservButton';
 import PaymentContainer from '../../../components/payment/PaymentContainer';
+import ReturnMessage from '../../../components/ReturnMessage';
 
 export default function Payment() {
   const { enrollment } = useEnrollment();
@@ -40,19 +41,20 @@ export default function Payment() {
 
   if (!enrollment)
     return (
-      <ContainerWithoutEnrollment>
-        <MainDescription>Ingresso e pagamento</MainDescription>
-        <NoEnrollment>
-          <p>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</p>
-        </NoEnrollment>
-      </ContainerWithoutEnrollment>
+      <ReturnMessage
+        MainPageName={'Ingresso e pagamento'}
+        Message={'Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso'}
+      />
     );
 
   return (
     <Container>
-      { ticketData  ? (
-        isPaid ? <PaymentConfirm ticketData={ticketData} />
-          : <PaymentContainer setIsPaid = {setIsPaid}/>
+      {ticketData ? (
+        isPaid ? (
+          <PaymentConfirm ticketData={ticketData} />
+        ) : (
+          <PaymentContainer setIsPaid={setIsPaid} />
+        )
       ) : (
         <TypeOfTicket>
           <MainDescription>Ingresso e pagamento</MainDescription>
