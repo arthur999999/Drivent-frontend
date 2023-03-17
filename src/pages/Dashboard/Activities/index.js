@@ -42,9 +42,7 @@ export default function Activities() {
       });
   }
 
-  if (!userTicket) return <>Loading</>;
-
-  if (userTicket.status === 'RESERVED')
+  if (!userTicket || userTicket.status === 'RESERVED')
     return (
       <ReturnMessage
         MainPageName={'Escolha de atividades'}
