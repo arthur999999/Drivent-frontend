@@ -57,9 +57,10 @@ const Container = styled.div`
 
 const Box = styled.div`
   width: 100%;
-  height: 70%;
+  height: 75%;
   border: 1px solid #d7d7d7;
   padding: 9px;
+  overflow-y: auto;
 `;
 
 const Title = styled.div`

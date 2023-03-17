@@ -3,10 +3,10 @@ import { CgEnter } from 'react-icons/cg';
 import { TbCircleX } from 'react-icons/tb';
 
 export default function Card({ activities }) {
-  const { endsAt, name, startsAt, subscribed, vacancies } = activities;
+  const { endsAt, name, startsAt, subscribed, vacancies, duration } = activities;
 
   return (
-    <Container>
+    <Container hours={duration}>
       <NameDiv>
         <h1>{name}</h1>
         <p>
@@ -17,12 +17,12 @@ export default function Card({ activities }) {
       {vacancies <= 0 ? (
         <IconDiv>
           <Closed />
-          <VacanciesText color='#CC6666'>Esgotado</VacanciesText>
+          <VacanciesText color="#CC6666">Esgotado</VacanciesText>
         </IconDiv>
       ) : (
         <IconDiv>
           <Enter />
-          <VacanciesText color='#078632'>{vacancies} vagas</VacanciesText>
+          <VacanciesText color="#078632">{vacancies} vagas</VacanciesText>
         </IconDiv>
       )}
     </Container>
@@ -31,7 +31,7 @@ export default function Card({ activities }) {
 
 const Container = styled.div`
   background-color: #f1f1f1;
-  height: 79px;
+  height: ${(props) => props.hours * 80 + 'px'};
   border-radius: 5px;
   padding: 12px;
   display: flex;
@@ -55,7 +55,7 @@ const Container = styled.div`
 
 const Line = styled.div`
   border: 1px solid #cfcfcf;
-  height: 60px;
+  height: 100%px;
   margin-right: 12px;
 `;
 
@@ -88,7 +88,7 @@ const Enter = styled(CgEnter)`
 `;
 
 const Closed = styled(TbCircleX)`
-  color: #CC6666;
+  color: #cc6666;
   font-size: 25px;
   height: 70%;
 `;
