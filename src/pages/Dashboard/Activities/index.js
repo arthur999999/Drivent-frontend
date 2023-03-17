@@ -6,11 +6,13 @@ import styled from 'styled-components';
 import { getEventInfo } from '../../../services/eventApi';
 import { getBookingService } from '../../../services/bookingApi';
 import ActivitiesBox from '../../../components/Activities/activitiesBox';
+import { getActivitiesDates, getActivitiesByDate } from '../../../services/activitiesApi';
 
 export default function Activities() {
   const [userTicket, setUserTicket] = useState(null);
   const [activities, setActivities] = useState(null);
   const [userBooking, setUserBooking] = useState(null);
+  const [dates, setDates] = useState();
   const [clickedDay, setClickedDay] = useState();
   const { userData } = useContext(UserContext);
 
@@ -18,6 +20,15 @@ export default function Activities() {
     getBookingService(userData.token)
       .then((res) => {
         setUserBooking(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    getActivitiesDates(userData.token)
+      .then((res) => {
+        setDates(res);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -65,9 +76,30 @@ export default function Activities() {
       <MainTitle>Escolha de atividades</MainTitle>
       <FirstMessage>Primeiro, filtre pelo dia do evento: </FirstMessage>
       <ButtonsFilters>
-        <FilterButton onClick={() => {}}>Sexta, 22/10</FilterButton>
-        <FilterButton>Sábado, 23/10</FilterButton>
-        <FilterButton>Domingo, 24/10</FilterButton>
+        <FilterButton
+          onClick={() => {
+            setClickedDay(dates[0].id);
+          }}
+          color={dates && clickedDay === dates[0].id ? true : false}
+        >
+          {dates && dates[0].weekday}, {dates && dates[0].day}/{dates && dates[0].mounth}
+        </FilterButton>
+        <FilterButton
+          onClick={() => {
+            setClickedDay(dates[1].id);
+          }}
+          color={dates && clickedDay === dates[1].id ? true : false}
+        >
+          {dates && dates[1].weekday}, {dates && dates[1].day}/{dates && dates[1].mounth}
+        </FilterButton>
+        <FilterButton
+          onClick={() => {
+            setClickedDay(dates[2].id);
+          }}
+          color={dates && clickedDay === dates[2].id ? true : false}
+        >
+          {dates && dates[2].weekday}, {dates && dates[2].day}/{dates && dates[2].mounth}
+        </FilterButton>
       </ButtonsFilters>
       <ActivitiesBox />
     </MainContainer>
@@ -99,7 +131,7 @@ const FilterButton = styled.button`
   width: 131px;
   height: 37px;
   border: none;
-  background: #e0e0e0;
+  background: ${(props) => (props.color ? '#FFD37D' : '#e0e0e0')};
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   margin-right: 20px;
