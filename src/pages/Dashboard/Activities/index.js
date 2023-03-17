@@ -28,7 +28,6 @@ export default function Activities() {
     getActivitiesDates(userData.token)
       .then((res) => {
         setDates(res);
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -80,7 +79,7 @@ export default function Activities() {
           onClick={() => {
             setClickedDay(dates[0].id);
           }}
-          color={dates && clickedDay === dates[0].id ? true : false}
+          color={dates && clickedDay === dates[0].id && true}
         >
           {dates && dates[0].weekday}, {dates && dates[0].day}/{dates && dates[0].mounth}
         </FilterButton>
@@ -88,7 +87,7 @@ export default function Activities() {
           onClick={() => {
             setClickedDay(dates[1].id);
           }}
-          color={dates && clickedDay === dates[1].id ? true : false}
+          color={dates && clickedDay === dates[1].id && true}
         >
           {dates && dates[1].weekday}, {dates && dates[1].day}/{dates && dates[1].mounth}
         </FilterButton>
@@ -96,12 +95,12 @@ export default function Activities() {
           onClick={() => {
             setClickedDay(dates[2].id);
           }}
-          color={dates && clickedDay === dates[2].id ? true : false}
+          color={dates && clickedDay === dates[2].id && true}
         >
           {dates && dates[2].weekday}, {dates && dates[2].day}/{dates && dates[2].mounth}
         </FilterButton>
       </ButtonsFilters>
-      <ActivitiesBox />
+      {clickedDay && <ActivitiesBox clickedDayId={clickedDay}/>}
     </MainContainer>
   );
 }

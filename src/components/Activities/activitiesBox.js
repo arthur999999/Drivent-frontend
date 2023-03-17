@@ -1,20 +1,47 @@
 import styled from 'styled-components';
 import Card from './Card';
+import { getActivitiesByDate } from '../../services/activitiesApi';
+import { useContext, useEffect, useState } from 'react';
+import UserContext from '../../contexts/UserContext';
 
-export default function ActivitiesBox() {
+export default function ActivitiesBox({ clickedDayId }) {
+  const { userData } = useContext(UserContext);
+  const [locations, setLocations] = useState();
+
+  useEffect(() => {
+    getActivitiesByDate(userData.token, clickedDayId)
+      .then((res) => {
+        setLocations(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [clickedDayId]);
+
   return (
     <Container>
       <TitleAndBox>
-        <Title>Auditório Principal</Title>
-        <Box><Card></Card></Box>
+        <Title>{locations && locations[0].name}</Title>
+        <Box>
+          {locations &&
+            locations[0].activities.map((act) => {
+              return <Card key={act.id} activities={act}></Card>;
+            })}
+        </Box>
       </TitleAndBox>
       <TitleAndBox>
-        <Title>Auditório Lateral</Title>
-        <Box></Box>
+        <Title>{locations && locations[1].name}</Title>
+        <Box>{locations &&
+            locations[1].activities.map((act) => {
+              return <Card key={act.id} activities={act}></Card>;
+            })}</Box>
       </TitleAndBox>
       <TitleAndBox>
-        <Title>Sala de Workshop</Title>
-        <Box></Box>
+        <Title>{locations && locations[2].name}</Title>
+        <Box>{locations &&
+            locations[2].activities.map((act) => {
+              return <Card key={act.id} activities={act}></Card>;
+            })}</Box>
       </TitleAndBox>
     </Container>
   );
