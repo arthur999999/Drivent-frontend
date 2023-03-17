@@ -5,19 +5,25 @@ import ReturnMessage from '../../../components/ReturnMessage';
 import styled from 'styled-components';
 import { getEventInfo } from '../../../services/eventApi';
 import { getBookingService } from '../../../services/bookingApi';
+import { getActivitiesDates } from '../../../services/activitiesApi';
 
 export default function Activities() {
   const [userTicket, setUserTicket] = useState(null);
   const [activities, setActivities] = useState(null);
   const [userBooking, setUserBooking] = useState(null);
+  const [activitiesDates, setActivitiesDates] = useState(null);
   const { userData } = useContext(UserContext);
 
+  console.log(activitiesDates);
+
   useEffect(() => {
-    getBookingService(userData.token).then((res) => {
-      setUserBooking(res);
-    }).catch((err) => {
-      console.log(err);
-    });
+    getBookingService(userData.token)
+      .then((res) => {
+        setUserBooking(res);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
 
     getTicket(userData.token)
       .then((res) => {
@@ -26,14 +32,24 @@ export default function Activities() {
       .catch((err) => {
         console.log(err.message);
       });
+
+    getActivitiesDates(userData.token)
+      .then((res) => {
+        setActivitiesDates(res);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }, []);
 
   function getActivities(date) {
-    getActivities(date).then((res) => {
-      setActivities(res);
-    }).catch((err) => {
-      console.log(err.message);
-    });
+    getActivities(date)
+      .then((res) => {
+        setActivities(res);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   if (!userTicket) return <>Loading</>;
@@ -53,16 +69,22 @@ export default function Activities() {
         Message={'Sua modalidade de ingresso não necessita escolher atividade. Você terá acesso a todas as atividades.'}
       />
     );
-  if (!userBooking) return <ReturnMessage MainPageName={'Escolha de atividades'} Message={'Escolha seu hotel antes de prosseguir'} />;
-  
+
+  if (!userBooking)
+    return <ReturnMessage MainPageName={'Escolha de atividades'} Message={'Escolha seu hotel antes de prosseguir'} />;
+
   return (
     <MainContainer>
       <MainTitle>Escolha de atividades</MainTitle>
       <FirstMessage>Primeiro, filtre pelo dia do evento: </FirstMessage>
       <ButtonsFilters>
-        <FilterButton>Sexta, 22/10</FilterButton>
-        <FilterButton>Sábado, 23/10</FilterButton>
-        <FilterButton>Domingo, 24/10</FilterButton>
+        {activitiesDates !== null
+          ? activitiesDates.map((a) => (
+            <FilterButton>
+              {a.weekday}, {a.day}/{a.mounth}
+            </FilterButton>
+          ))
+          : ''}
       </ButtonsFilters>
     </MainContainer>
   );
