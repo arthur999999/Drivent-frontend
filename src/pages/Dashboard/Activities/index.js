@@ -100,7 +100,7 @@ export default function Activities() {
           {dates && dates[2].weekday}, {dates && dates[2].day}/{dates && dates[2].mounth}
         </FilterButton>
       </ButtonsFilters>
-      {clickedDay && <ActivitiesBox clickedDayId={clickedDay}/>}
+      {clickedDay && <ActivitiesBox clickedDayId={clickedDay} />}
     </MainContainer>
   );
 }

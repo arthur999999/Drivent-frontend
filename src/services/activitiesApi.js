@@ -18,3 +18,12 @@ export async function getActivitiesDates(token) {
   });
   return response.data;
 }
+
+export async function postSubscriptionService(token, activityId) {
+  const response = await api.post(`/activities/${activityId}`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+}

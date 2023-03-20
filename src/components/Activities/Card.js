@@ -1,12 +1,19 @@
 import styled from 'styled-components';
-import { CgEnter } from 'react-icons/cg';
+import { CgEnter, CgCheckO } from 'react-icons/cg';
 import { TbCircleX } from 'react-icons/tb';
+import useToken from '../../hooks/useToken';
+import { postSubscriptionService } from '../../services/activitiesApi';
 
-export default function Card({ activities }) {
+export default function Card({ activities, reload, setReload }) {
+  const token = useToken();
   const { endsAt, name, startsAt, subscribed, vacancies, duration } = activities;
+  async function sendSubscription() {
+    await postSubscriptionService(token, activities.id);
+    setReload([...reload, 1]);
+  }
 
   return (
-    <Container hours={duration}>
+    <Container subscribed={subscribed} onClick={() => sendSubscription()} hours={duration}>
       <NameDiv>
         <h1>{name}</h1>
         <p>
@@ -14,7 +21,12 @@ export default function Card({ activities }) {
         </p>
       </NameDiv>
       <Line />
-      {vacancies <= 0 ? (
+      {subscribed ? <Center>
+        <IconDiv>
+          <Verify />
+          <VacanciesText color="#078632">Inscrito</VacanciesText>
+        </IconDiv>
+      </Center> : <Center>{vacancies <= 0 ? (
         <IconDiv>
           <Closed />
           <VacanciesText color="#CC6666">Esgotado</VacanciesText>
@@ -24,13 +36,14 @@ export default function Card({ activities }) {
           <Enter />
           <VacanciesText color="#078632">{vacancies} vagas</VacanciesText>
         </IconDiv>
-      )}
+      )}</Center> }
+      
     </Container>
   );
 }
 
 const Container = styled.div`
-  background-color: #f1f1f1;
+  background-color: ${(props) => props.subscribed ? '#D0FFDB' : '#f1f1f1' };
   height: ${(props) => props.hours * 80 + 'px'};
   border-radius: 5px;
   padding: 12px;
@@ -55,12 +68,20 @@ const Container = styled.div`
 
 const Line = styled.div`
   border: 1px solid #cfcfcf;
-  height: 100%px;
+  height: 100%;
   margin-right: 12px;
 `;
 
 const NameDiv = styled.div`
   width: 70%;
+`;
+
+const Center = styled.div`
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const IconDiv = styled.div`
@@ -89,6 +110,12 @@ const Enter = styled(CgEnter)`
 
 const Closed = styled(TbCircleX)`
   color: #cc6666;
+  font-size: 25px;
+  height: 70%;
+`;
+
+const Verify = styled(CgCheckO)`
+  color: #078632;
   font-size: 25px;
   height: 70%;
 `;

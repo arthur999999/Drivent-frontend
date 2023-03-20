@@ -7,6 +7,7 @@ import UserContext from '../../contexts/UserContext';
 export default function ActivitiesBox({ clickedDayId }) {
   const { userData } = useContext(UserContext);
   const [locations, setLocations] = useState();
+  const [reload, setReload] = useState([1]);
 
   useEffect(() => {
     getActivitiesByDate(userData.token, clickedDayId)
@@ -16,7 +17,7 @@ export default function ActivitiesBox({ clickedDayId }) {
       .catch((err) => {
         console.log(err);
       });
-  }, [clickedDayId]);
+  }, [clickedDayId, reload]);
 
   return (
     <Container>
@@ -25,7 +26,7 @@ export default function ActivitiesBox({ clickedDayId }) {
         <Box>
           {locations &&
             locations[0].activities.map((act) => {
-              return <Card key={act.id} activities={act}></Card>;
+              return <Card setReload={setReload} reload={reload} key={act.id} activities={act}></Card>;
             })}
         </Box>
       </TitleAndBox>
@@ -33,14 +34,14 @@ export default function ActivitiesBox({ clickedDayId }) {
         <Title>{locations && locations[1].name}</Title>
         <Box>{locations &&
             locations[1].activities.map((act) => {
-              return <Card key={act.id} activities={act}></Card>;
+              return <Card setReload={setReload} reload={reload} key={act.id} activities={act}></Card>;
             })}</Box>
       </TitleAndBox>
       <TitleAndBox>
         <Title>{locations && locations[2].name}</Title>
         <Box>{locations &&
             locations[2].activities.map((act) => {
-              return <Card key={act.id} activities={act}></Card>;
+              return <Card setReload={setReload} reload={reload} key={act.id} activities={act}></Card>;
             })}</Box>
       </TitleAndBox>
     </Container>
